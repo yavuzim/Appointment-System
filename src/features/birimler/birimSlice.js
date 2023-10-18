@@ -1,26 +1,25 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import unitService from './unitService'
+import birimService from './birimService'
 
 const initialState = {
-    units: [],
-    selectedUnit: null,
+    birimler: [],
+    secilenBirim: null,
     isError: false,
     isSuccess: false,
     isLoading: false,
     message: ''
 }
 
-export const unitsGet = createAsyncThunk('unit/unitsGet', async (_, thunkAPI) => {
+export const birimlerGetir = createAsyncThunk('birim/birimlerGetir', async (_, thunkAPI) => {
     try {
-        return await unitService.unitsGet()
+        return await birimService.birimlerGetir()
     } catch (error) {
         const message = error.message
         return thunkAPI.rejectWithValue(message)
     }
 })
-
-export const unitSlice = createSlice({
-    name: 'unitSlice',
+export const birimSlice = createSlice({
+    name: 'birimSlice',
     initialState,
     reducers: {
         reset: (state) => {
@@ -31,15 +30,15 @@ export const unitSlice = createSlice({
         }
     },
     extraReducers: (builder) => {
-        builder.addCase(unitsGet.pending, (state) => {
+        builder.addCase(birimlerGetir.pending, (state) => {
             state.isLoading = true
-        }).addCase(unitsGet.fulfilled, (state, action) => {
-            state.isLoading = true
+        }).addCase(birimlerGetir.fulfilled, (state, action) => {
+            state.isLoading = false
             state.isSuccess = true
-            state.units = action.payload
+            state.birimler = action.payload
         })
     }
 })
 
-export const {reset}=unitSlice.actions
-export default unitSlice.reducer
+export const { reset } = birimSlice.actions
+export default birimSlice.reducer
