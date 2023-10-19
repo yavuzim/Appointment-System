@@ -4,16 +4,23 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
 import { birimlerGetir } from '../../features/birimler/birimSlice'
 import { ClipLoader, RingLoader } from 'react-spinners'
+import { useNavigate } from 'react-router-dom'
 
 export default function Home() {
 
     const dispatch = useDispatch()
+    const nagivate = useNavigate()
 
     const { birimler, isLoading } = useSelector((state) => state.birimState)
 
     useEffect(() => {
         dispatch(birimlerGetir())
     }, [])
+
+    const handleBirimSec=(id)=>{
+        localStorage.setItem('secilenBirim',JSON.stringify(id))
+        nagivate('/login')
+    }
 
     if (isLoading) {
         return(
@@ -33,7 +40,7 @@ export default function Home() {
                     <div className='row'>
                         {birimler.map(birim => (
                             <div className='col mb-2 mt-4 pr-1' key={birim.id}>
-                                <p className='btn btn-primary'>{birim.ad}</p>
+                                <p className='btn btn-primary' onClick={()=>handleBirimSec(birim.id)}>{birim.ad}</p>
                             </div>
                         ))}
                     </div>

@@ -18,6 +18,16 @@ export const birimlerGetir = createAsyncThunk('birim/birimlerGetir', async (_, t
         return thunkAPI.rejectWithValue(message)
     }
 })
+
+export const birimSec = createAsyncThunk('birim/birimSec', async (id, thunkAPI) => {
+    try {
+        return await birimService.secilenBirimGetir(id)
+    } catch (error) {
+        const message = error.message
+        return thunkAPI.rejectWithValue(message)
+    }
+})
+
 export const birimSlice = createSlice({
     name: 'birimSlice',
     initialState,
@@ -36,6 +46,18 @@ export const birimSlice = createSlice({
             state.isLoading = false
             state.isSuccess = true
             state.birimler = action.payload
+        }).addCase(birimSec.pending, (state) => {
+            state.isLoading = true
+            state.isSuccess = false
+        }).addCase(birimSec.fulfilled, (state, action) => {
+            state.secilenBirim = action.payload
+            state.isLoading = false
+            state.isSuccess = true
+        }).addCase(birimSec.rejected, (state, action) => {
+            state.isLoading = false
+            state.isError = true
+            state.message = action.payload
+            state.secilenBirim = null
         })
     }
 })
