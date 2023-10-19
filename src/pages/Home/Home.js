@@ -3,16 +3,25 @@ import './Home.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
 import { birimlerGetir } from '../../features/birimler/birimSlice'
+import { ClipLoader, RingLoader } from 'react-spinners'
 
 export default function Home() {
 
     const dispatch = useDispatch()
 
-    const { birimler } = useSelector((state) => state.birimState)
+    const { birimler, isLoading } = useSelector((state) => state.birimState)
 
     useEffect(() => {
         dispatch(birimlerGetir())
     }, [])
+
+    if (isLoading) {
+        return(
+            <div className='text-center'>
+                <RingLoader size={200} color='#bde0fe' />
+            </div>
+        )
+    }
 
     return (
         <div className='text-center paper'>
