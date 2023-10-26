@@ -1,10 +1,11 @@
 import './Login.css'
 import { FcGoogle } from 'react-icons/fc'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import BarLoader from 'react-spinners/BarLoader'
 import { birimSec } from '../../features/birimler/birimSlice'
+import { login } from '../../features/yoneticiler/yoneticiSlice'
 
 function Login() {
 
@@ -12,6 +13,18 @@ function Login() {
   const dispatch = useDispatch()
 
   const { secilenBirim, isLoading } = useSelector((state) => state.birimState)
+  const { yonetici } = useSelector((state) => state.yoneticiState)
+
+  const [email, setEmail] = useState('')
+  const [parola, setParola] = useState('')
+
+  const handleYoneticiGiris = (e) => {
+    e.preventDefault()
+    const veri = {
+      email, parola
+    }
+    dispatch(login(veri))
+  }
 
   useEffect(() => {
     const secilenbirimId = localStorage.getItem('secilenBirim')
@@ -20,6 +33,25 @@ function Login() {
     }
     dispatch(birimSec(JSON.parse(secilenbirimId)))
   }, [])
+
+  useEffect(() => {
+    if (yonetici && secilenBirim) {
+      if (yonetici.yetki === "admin") {
+        localStorage.setItem('yonetici', JSON.stringify({ uid: yonetici.uid }))
+        console.log('admin sayfasına yönlensin');
+      } else if (yonetici.yetki === "moderator") {
+
+        if (yonetici.yetkiliBirimId === secilenBirim.id) {
+          localStorage.setItem('yonetici', JSON.stringify({ uid: yonetici.uid }))
+          console.log("Moderator sayfasına yönlensin.");
+        } else {
+          console.log("Moderator Yetkisiz Giriş");
+        }
+      } else {
+        console.log("Yetkisiz Giriş!");
+      }
+    }
+  }, [yonetici])
 
   return (
     <div className='text-center'>
@@ -41,11 +73,11 @@ function Login() {
         <hr />
         <h3 className='mb-5'>Yönetici Girişi</h3>
         <br />
-        <input type='email' id="email" name="email" className='form-control' placeholder='E-Mail Adresinizi Giriniz...' />
+        <input type='email' id="email" name="email" className='form-control' value={email} onChange={(e) => setEmail(e.target.value)} placeholder='E-Mail Adresinizi Giriniz...' />
         <br />
-        <input type='password' id="password" name="password" className='form-control' placeholder='Şifrenizi Giriniz...' />
+        <input type='password' id="password" name="password" className='form-control' value={parola} onChange={(e) => setParola(e.target.value)} placeholder='Şifrenizi Giriniz...' />
         <br />
-        <button className='btn btn-outline-primary mr-5'>Yönetici Giriş Yap</button>
+        <button className='btn btn-outline-primary mr-5' onClick={handleYoneticiGiris}>Yönetici Giriş Yap</button>
       </form>
     </div>
   )
