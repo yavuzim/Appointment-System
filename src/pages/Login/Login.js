@@ -38,12 +38,12 @@ function Login() {
     if (yonetici && secilenBirim) {
       if (yonetici.yetki === "admin") {
         localStorage.setItem('yonetici', JSON.stringify({ uid: yonetici.uid }))
-        console.log('admin sayfasına yönlensin');
+       nagivate('/admin')
       } else if (yonetici.yetki === "moderator") {
 
         if (yonetici.yetkiliBirimId === secilenBirim.id) {
           localStorage.setItem('yonetici', JSON.stringify({ uid: yonetici.uid }))
-          console.log("Moderator sayfasına yönlensin.");
+         nagivate('/moderator')
         } else {
           console.log("Moderator Yetkisiz Giriş");
         }

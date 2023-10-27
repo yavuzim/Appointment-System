@@ -1,6 +1,6 @@
 import { auth, db } from '../../firebase/config'
 import { signInWithEmailAndPassword } from 'firebase/auth'
-import { collection, query, where, getDocs } from 'firebase/firestore'
+import { collection, query, where, getDocs, getDoc } from 'firebase/firestore'
 
 const login = async (email, parola) => {
     const userResponse = await signInWithEmailAndPassword(auth, email, parola)
@@ -19,8 +19,25 @@ const login = async (email, parola) => {
     return { uid: userResponse.user.uid, email: userResponse.user.email, yetki, yetkiliBirimId }
 }
 
+const yoneticiBilgilerGetir = async (uid) => {
+    let yetki = "yok"
+    let yetkiliBirimId = "yok"
+    let email = ""
+    const yoneticilerRef = collection(db, 'yoneticiler')
+    const q = query(yoneticilerRef, where("uid", "==", uid))
+    const querySnapshot = await getDocs(q)
+
+    querySnapshot.forEach(doc => {
+        yetki = doc.data().yetki
+        yetkiliBirimId = doc.data().yetkiliBirimId
+        email = doc.data().email
+    })
+    return { uid, email, yetki, yetkiliBirimId }
+}
+
 const yoneticiService = {
-    login
+    login,
+    yoneticiBilgilerGetir
 }
 
 export default yoneticiService
