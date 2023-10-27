@@ -2,6 +2,8 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Login from './pages/Login/Login';
 import Home from './pages/Home/Home';
+import Admin from './pages/Admin/Admin';
+import Moderator from './pages/Moderator/Moderator';
 
 
 function App() {
@@ -11,6 +13,8 @@ function App() {
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/login' element={<Login />} />
+          <Route path='/admin' element={<Admin />} />
+          <Route path='/moderator' element={<Moderator />} />
         </Routes>
       </Router>
     </div>
