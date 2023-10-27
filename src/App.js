@@ -4,9 +4,22 @@ import Login from './pages/Login/Login';
 import Home from './pages/Home/Home';
 import Admin from './pages/Admin/Admin';
 import Moderator from './pages/Moderator/Moderator';
-
+import { bilgilerGetir } from './features/yoneticiler/yoneticiSlice';
+import { UseSelector, useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
 
 function App() {
+
+  const yoneticiStorage = JSON.parse(localStorage.getItem('yonetici'))
+  const { isSuccess } = useSelector((state) => state.yoneticiState)
+  const dispatch = useDispatch()
+
+  useEffect(()=>{
+    if (yoneticiStorage) {
+      dispatch(bilgilerGetir(yoneticiStorage.uid))
+    }
+  },[isSuccess])
+
   return (
     <div className="body">
       <Router>
