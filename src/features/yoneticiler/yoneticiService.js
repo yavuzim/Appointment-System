@@ -35,17 +35,34 @@ const yoneticiBilgilerGetir = async (uid) => {
     return { uid, email, yetki, yetkiliBirimId }
 }
 
-const cikisYap = async ()=>{
+const cikisYap = async () => {
     signOut(auth)
     localStorage.removeItem('yonetici')
 
     return null
 }
 
+const moderatorlerGetir = async () => {
+    const yoneticilerRef = collection(db, 'yoneticiler')
+    const q = query(yoneticilerRef, where("yetki", "==", "moderator"))
+
+    const querySnap = await getDocs(q)
+
+    let dizi = []
+
+    querySnap.forEach(doc => {
+        dizi.push({...doc.data(), id:doc.id})
+    })
+    return dizi
+}
+
 const yoneticiService = {
     login,
     yoneticiBilgilerGetir,
-    cikisYap
+    cikisYap,
+    moderatorlerGetir
 }
+
+
 
 export default yoneticiService

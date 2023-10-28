@@ -3,6 +3,7 @@ import yoneticiService from './yoneticiService'
 
 const initialState = {
     yonetici: null,
+    moderatorler: [],
     isError: false,
     isSuccess: false,
     isLoading: false,
@@ -26,7 +27,7 @@ export const bilgilerGetir = createAsyncThunk('yonetici/bilgilerGetir', async (u
     }
 })
 
-export const cikisYap = createAsyncThunk('yonetici/cikisYap', async (_,thunkAPI) => {
+export const cikisYap = createAsyncThunk('yonetici/cikisYap', async (_, thunkAPI) => {
     try {
         return await yoneticiService.cikisYap()
     } catch (error) {
@@ -34,6 +35,16 @@ export const cikisYap = createAsyncThunk('yonetici/cikisYap', async (_,thunkAPI)
         return thunkAPI.rejectWithValue(message)
     }
 })
+
+export const moderatorlerGetir = createAsyncThunk('yonetici/moderatorlerGetir', async (_, thunkAPI) => {
+    try {
+        return await yoneticiService.moderatorlerGetir()
+    } catch (error) {
+        const message = error.message
+        return thunkAPI.rejectWithValue(message)
+    }
+})
+
 
 export const yoneticiSlice = createSlice({
     name: 'yoneticiSlice',
@@ -89,6 +100,20 @@ export const yoneticiSlice = createSlice({
                 state.isError = true
                 state.message = action.payload
                 state.yonetici = null
+            })
+            .addCase(moderatorlerGetir.pending, (state) => {
+                state.isLoading = true
+            })
+            .addCase(moderatorlerGetir.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.isSuccess = true
+                state.moderatorler = action.payload
+            })
+            .addCase(moderatorlerGetir.rejected, (state, action) => {
+                state.isLoading = false
+                state.isError = true
+                state.message = action.payload
+                state.moderatorler = []
             })
     }
 })
