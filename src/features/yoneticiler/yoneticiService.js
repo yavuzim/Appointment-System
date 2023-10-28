@@ -1,5 +1,5 @@
 import { auth, db } from '../../firebase/config'
-import { signInWithEmailAndPassword } from 'firebase/auth'
+import { signInWithEmailAndPassword, signOut } from 'firebase/auth'
 import { collection, query, where, getDocs, getDoc } from 'firebase/firestore'
 
 const login = async (email, parola) => {
@@ -35,9 +35,17 @@ const yoneticiBilgilerGetir = async (uid) => {
     return { uid, email, yetki, yetkiliBirimId }
 }
 
+const cikisYap = async ()=>{
+    signOut(auth)
+    localStorage.removeItem('yonetici')
+
+    return null
+}
+
 const yoneticiService = {
     login,
-    yoneticiBilgilerGetir
+    yoneticiBilgilerGetir,
+    cikisYap
 }
 
 export default yoneticiService

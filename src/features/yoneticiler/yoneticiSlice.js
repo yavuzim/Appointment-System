@@ -26,6 +26,15 @@ export const bilgilerGetir = createAsyncThunk('yonetici/bilgilerGetir', async (u
     }
 })
 
+export const cikisYap = createAsyncThunk('yonetici/cikisYap', async (_,thunkAPI) => {
+    try {
+        return await yoneticiService.cikisYap()
+    } catch (error) {
+        const message = error.message
+        return thunkAPI.rejectWithValue(message)
+    }
+})
+
 export const yoneticiSlice = createSlice({
     name: 'yoneticiSlice',
     initialState,
@@ -62,6 +71,20 @@ export const yoneticiSlice = createSlice({
                 state.yonetici = action.payload
             })
             .addCase(bilgilerGetir.rejected, (state, action) => {
+                state.isLoading = false
+                state.isError = true
+                state.message = action.payload
+                state.yonetici = null
+            })
+            .addCase(cikisYap.pending, (state) => {
+                state.isLoading = true
+            })
+            .addCase(cikisYap.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.isSuccess = true
+                state.yonetici = action.payload
+            })
+            .addCase(cikisYap.rejected, (state, action) => {
                 state.isLoading = false
                 state.isError = true
                 state.message = action.payload
