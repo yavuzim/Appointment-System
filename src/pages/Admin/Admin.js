@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
-import { cikisYap, moderatorlerGetir, birimeModeratorAta } from "../../features/yoneticiler/yoneticiSlice"
+import { cikisYap, moderatorlerGetir, birimeModeratorAta, reset } from "../../features/yoneticiler/yoneticiSlice"
 import { birimlerGetir } from "../../features/birimler/birimSlice"
 import './Admin.css'
+import { toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 function Admin() {
-    const { yonetici, isSuccess, moderatorler } = useSelector((state) => state.yoneticiState)
+    const { yonetici, isSuccess, moderatorler, moderatorAtamaMesaj } = useSelector((state) => state.yoneticiState)
     const { birimler } = useSelector((state) => state.birimState)
     const nagivate = useNavigate()
     const dispatch = useDispatch()
@@ -41,6 +43,13 @@ function Admin() {
         dispatch(birimlerGetir())
 
     }, [isSuccess])
+
+    useEffect(() => {
+        if (moderatorAtamaMesaj != '') {
+            toast.success(moderatorAtamaMesaj)
+            dispatch(reset())
+        }
+    }, [moderatorAtamaMesaj])
     return (
         <div className="admin">
             <div className="alert alert-secondary" role="alert">

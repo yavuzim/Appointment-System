@@ -7,6 +7,7 @@ import Moderator from './pages/Moderator/Moderator';
 import { bilgilerGetir } from './features/yoneticiler/yoneticiSlice';
 import { UseSelector, useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
+import { ToastContainer } from 'react-toastify';
 
 function App() {
 
@@ -14,14 +15,15 @@ function App() {
   const { isSuccess } = useSelector((state) => state.yoneticiState)
   const dispatch = useDispatch()
 
-  useEffect(()=>{
+  useEffect(() => {
     if (yoneticiStorage) {
       dispatch(bilgilerGetir(yoneticiStorage.uid))
     }
-  },[isSuccess])
+  }, [isSuccess])
 
   return (
     <div className="body">
+      <ToastContainer />
       <Router>
         <Routes>
           <Route path='/' element={<Home />} />

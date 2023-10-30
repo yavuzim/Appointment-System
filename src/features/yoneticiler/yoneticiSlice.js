@@ -7,7 +7,8 @@ const initialState = {
     isError: false,
     isSuccess: false,
     isLoading: false,
-    message: ''
+    message: '',
+    moderatorAtamaMesaj: ''
 }
 export const login = createAsyncThunk('yonetici/login', async (veri, thunkAPI) => {
     try {
@@ -64,6 +65,7 @@ export const yoneticiSlice = createSlice({
             state.isSuccess = false
             state.isLoading = false
             state.message = ''
+            state.moderatorAtamaMesaj = ''
         }
     },
     extraReducers: (builder) => {
@@ -125,7 +127,7 @@ export const yoneticiSlice = createSlice({
                 state.moderatorler = []
             })
             .addCase(birimeModeratorAta.fulfilled, (state, action) => {
-                state.message = action.payload
+                state.moderatorAtamaMesaj = action.payload
             })
             .addCase(birimeModeratorAta.rejected, (state, action) => {
                 state.isError = true
