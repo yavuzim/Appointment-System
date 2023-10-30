@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
-import { cikisYap, moderatorlerGetir } from "../../features/yoneticiler/yoneticiSlice"
+import { cikisYap, moderatorlerGetir, birimeModeratorAta } from "../../features/yoneticiler/yoneticiSlice"
 import { birimlerGetir } from "../../features/birimler/birimSlice"
 import './Admin.css'
 
@@ -15,9 +15,11 @@ function Admin() {
     const [moderator, setModerator] = useState("")
 
     const handleYetkiliAta = () => {
-        if (birim !== "" && moderator !== "") {
-            console.log(birim);
-            console.log(moderator);
+        if ((birim !== "" && moderator !== "") && (birim !== "1" && moderator !== "1")) {
+            const veri = {
+                birim, moderator
+            }
+            dispatch(birimeModeratorAta(veri))
         }
     }
 

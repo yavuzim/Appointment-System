@@ -1,6 +1,6 @@
 import { auth, db } from '../../firebase/config'
 import { signInWithEmailAndPassword, signOut } from 'firebase/auth'
-import { collection, query, where, getDocs } from 'firebase/firestore'
+import { collection, query, where, getDocs, doc, updateDoc } from 'firebase/firestore'
 
 const login = async (email, parola) => {
     const userResponse = await signInWithEmailAndPassword(auth, email, parola)
@@ -56,11 +56,26 @@ const moderatorlerGetir = async () => {
     return dizi
 }
 
+const birimeModeratorAta = async (did, bid) => {
+    const docRef = doc(db, 'yoneticiler',did)
+    try {
+       await updateDoc(docRef, {
+        yetkiliBirimId:bid
+       })
+
+       return "moderatöre birim atandı"
+
+    } catch (error) {
+        return error
+    }
+}
+
 const yoneticiService = {
     login,
     yoneticiBilgilerGetir,
     cikisYap,
-    moderatorlerGetir
+    moderatorlerGetir,
+    birimeModeratorAta
 }
 
 

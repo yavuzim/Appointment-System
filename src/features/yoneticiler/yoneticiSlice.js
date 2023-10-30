@@ -45,6 +45,15 @@ export const moderatorlerGetir = createAsyncThunk('yonetici/moderatorlerGetir', 
     }
 })
 
+export const birimeModeratorAta = createAsyncThunk('yonetici/birimeModeratorAta', async (veri, _, thunkAPI) => {
+    try {
+        return await yoneticiService.birimeModeratorAta(veri.moderator, veri.birim)
+    } catch (error) {
+        const message = error.message
+        return thunkAPI.rejectWithValue(message)
+    }
+})
+
 
 export const yoneticiSlice = createSlice({
     name: 'yoneticiSlice',
@@ -114,6 +123,13 @@ export const yoneticiSlice = createSlice({
                 state.isError = true
                 state.message = action.payload
                 state.moderatorler = []
+            })
+            .addCase(birimeModeratorAta.fulfilled, (state, action) => {
+                state.message = action.payload
+            })
+            .addCase(birimeModeratorAta.rejected, (state, action) => {
+                state.isError = true
+                state.message = action.payload
             })
     }
 })
