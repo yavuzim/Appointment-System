@@ -1,16 +1,27 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
-import { cikisYap } from "../../features/yoneticiler/yoneticiSlice"
+import { cikisYap, moderatorlerGetir } from "../../features/yoneticiler/yoneticiSlice"
+import { birimlerGetir } from "../../features/birimler/birimSlice"
 import './Admin.css'
 
 function Admin() {
-    const { yonetici, isSuccess } = useSelector((state) => state.yoneticiState)
+    const { yonetici, isSuccess, moderatorler } = useSelector((state) => state.yoneticiState)
+    const { birimler } = useSelector((state) => state.birimState)
     const nagivate = useNavigate()
-
     const dispatch = useDispatch()
 
-    const handleCikis=()=>{
+    const [birim, setBirim] = useState("")
+    const [moderator, setModerator] = useState("")
+
+    const handleYetkiliAta = () => {
+        if (birim !== "" && moderator !== "") {
+            console.log(birim);
+            console.log(moderator);
+        }
+    }
+
+    const handleCikis = () => {
         dispatch(cikisYap())
         nagivate('/')
     }
@@ -23,6 +34,10 @@ function Admin() {
         } else {
             nagivate('/login')
         }
+
+        dispatch(moderatorlerGetir())
+        dispatch(birimlerGetir())
+
     }, [isSuccess])
     return (
         <div className="admin">
@@ -60,25 +75,27 @@ function Admin() {
                 <div className="mt-3">
                     <div className="row">
                         <div className="col-6">
-                            <select className="form-select" aria-label="Default select example">
-                                <option>Birim seçiniz</option>
-                                <option value="1">Birim 1</option>
-                                <option value="2">Birim 2</option>
-                                <option value="3">Birim 3</option>
+                            <select className="form-select" aria-label="Default select example"
+                                onChange={(e) => setBirim(e.target.value)} value={birim}>
+                                <option value="1">Birim seçiniz</option>
+                                {birimler && birimler.map(birim => (
+                                    <option key={birim.id} value={birim.id}>{birim.ad}</option>
+                                ))}
                             </select>
                         </div>
                         <div className="col-6">
-                            <select className="form-select" aria-label="Default select example">
-                                <option>Moderatör seçiniz</option>
-                                <option value="1">Moderatör 1</option>
-                                <option value="2">Moderatör 2</option>
-                                <option value="3">Moderatör 3</option>
+                            <select className="form-select" aria-label="Default select example"
+                                onChange={(e) => setModerator(e.target.value)} value={moderator}>
+                                <option value="1">Moderatör seçiniz</option>
+                                {moderatorler && moderatorler.map(moderator => (
+                                    <option key={moderator.id} value={moderator.id}>{moderator.email}</option>
+                                ))}
                             </select>
                         </div>
                     </div>
                     <div className="row mt-4">
                         <div className="text-center">
-                            <button className="btn btn-outline-dark btn-sm">YETKİLİ ATA</button>
+                            <button className="btn btn-outline-dark btn-sm" onClick={handleYetkiliAta}>YETKİLİ ATA</button>
                         </div>
                     </div>
                 </div>

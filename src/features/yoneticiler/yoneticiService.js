@@ -1,6 +1,6 @@
 import { auth, db } from '../../firebase/config'
 import { signInWithEmailAndPassword, signOut } from 'firebase/auth'
-import { collection, query, where, getDocs, getDoc } from 'firebase/firestore'
+import { collection, query, where, getDocs } from 'firebase/firestore'
 
 const login = async (email, parola) => {
     const userResponse = await signInWithEmailAndPassword(auth, email, parola)
@@ -51,7 +51,7 @@ const moderatorlerGetir = async () => {
     let dizi = []
 
     querySnap.forEach(doc => {
-        dizi.push({...doc.data(), id:doc.id})
+        dizi.push({ ...doc.data(), id: doc.id })
     })
     return dizi
 }
