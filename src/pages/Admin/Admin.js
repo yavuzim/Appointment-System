@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
-import { cikisYap, moderatorlerGetir, birimeModeratorAta, reset } from "../../features/yoneticiler/yoneticiSlice"
+import { cikisYap, moderatorlerGetir, birimeModeratorAta, reset, birimModeratorlerGetir } from "../../features/yoneticiler/yoneticiSlice"
 import { birimlerGetir } from "../../features/birimler/birimSlice"
 import './Admin.css'
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
 function Admin() {
-    const { yonetici, isSuccess, moderatorler, moderatorAtamaMesaj } = useSelector((state) => state.yoneticiState)
+    const { yonetici, isSuccess, moderatorler, moderatorAtamaMesaj, yetkililer } = useSelector((state) => state.yoneticiState)
     const { birimler } = useSelector((state) => state.birimState)
     const nagivate = useNavigate()
     const dispatch = useDispatch()
@@ -41,6 +41,7 @@ function Admin() {
 
         dispatch(moderatorlerGetir())
         dispatch(birimlerGetir())
+        dispatch(birimModeratorlerGetir())
 
     }, [isSuccess])
 
@@ -108,6 +109,21 @@ function Admin() {
                         <div className="text-center">
                             <button className="btn btn-outline-dark btn-sm" onClick={handleYetkiliAta}>YETKİLİ ATA</button>
                         </div>
+                    </div>
+                </div>
+            </div>
+            <div className="alert alert-secondary" role="alert">
+                <h5>Birim Moderatörler</h5>
+                <div className="mt-3">
+                    <div className="row mt-4">
+                        <ul className="list-group">
+                            {yetkililer && yetkililer.map(yetkili=>(
+                                <li className="list-group-item d-flex justify-content-between align-item-center" key={yetkili.email}>
+                                    {yetkili.email}
+                                    <span className="badge bg-primary rounded-pill">{yetkili.birimAd}</span>
+                                </li>
+                            ))}
+                        </ul>
                     </div>
                 </div>
             </div>

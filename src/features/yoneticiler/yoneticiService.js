@@ -1,6 +1,7 @@
 import { auth, db } from '../../firebase/config'
 import { signInWithEmailAndPassword, signOut } from 'firebase/auth'
 import { collection, query, where, getDocs, doc, updateDoc, getDoc } from 'firebase/firestore'
+import birimService from '../birimler/birimService'
 
 const login = async (email, parola) => {
     const userResponse = await signInWithEmailAndPassword(auth, email, parola)
@@ -80,12 +81,29 @@ const birimeModeratorAta = async (did, bid) => {
     }
 }
 
+const birimModeratorlerGetir = async () => {
+    const birimler = await birimService.birimlerGetir()
+    const moderatorler = await moderatorlerGetir()
+
+    let dizi = []
+
+    moderatorler.forEach(m => {
+        birimler.forEach(b => {
+            if (b.id == m.yetkiliBirimId) {
+                dizi.push({ email: m.email, birimAd: b.ad })
+            }
+        })
+    })
+    return dizi
+}
+
 const yoneticiService = {
     login,
     yoneticiBilgilerGetir,
     cikisYap,
     moderatorlerGetir,
-    birimeModeratorAta
+    birimeModeratorAta,
+    birimModeratorlerGetir
 }
 
 
