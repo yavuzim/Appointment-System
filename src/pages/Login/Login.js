@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import BarLoader from 'react-spinners/BarLoader'
 import { birimSec } from '../../features/birimler/birimSlice'
 import { login } from '../../features/yoneticiler/yoneticiSlice'
+import { loginGoogle } from '../../features/kullanicilar/kullaniciSlice'
 
 function Login() {
 
@@ -26,6 +27,11 @@ function Login() {
     dispatch(login(veri))
   }
 
+  const handleKullaniciGiris = (e) => {
+    e.preventDefault()
+    dispatch(loginGoogle())
+  }
+
   useEffect(() => {
     const secilenbirimId = localStorage.getItem('secilenBirim')
     if (!secilenbirimId) {
@@ -38,12 +44,12 @@ function Login() {
     if (yonetici && secilenBirim) {
       if (yonetici.yetki === "admin") {
         localStorage.setItem('yonetici', JSON.stringify({ uid: yonetici.uid }))
-       nagivate('/admin')
+        nagivate('/admin')
       } else if (yonetici.yetki === "moderator") {
 
         if (yonetici.yetkiliBirimId === secilenBirim.id) {
           localStorage.setItem('yonetici', JSON.stringify({ uid: yonetici.uid }))
-         nagivate('/moderator')
+          nagivate('/moderator')
         } else {
           console.log("Moderator Yetkisiz Giriş");
         }
@@ -68,7 +74,7 @@ function Login() {
           <Link to="/">Anasayfa İçin Tıklayınız</Link>
         </div>
         <h3 className='mb-3'>Kullanıcı Girişi</h3>
-        <button className='btn btn-dark'>Google İle Giriş Yap</button>
+        <button className='btn btn-dark' onClick={handleKullaniciGiris}>Google İle Giriş Yap</button>
         <p className='mt-5 mb-3 text-muted'>Randevu Almak İçin <FcGoogle size={'2em'} />Hesabınız İle Giriş Yapınız</p>
         <hr />
         <h3 className='mb-5'>Yönetici Girişi</h3>

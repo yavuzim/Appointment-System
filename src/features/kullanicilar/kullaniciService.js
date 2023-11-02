@@ -6,6 +6,7 @@ const googleLogin = async () => {
     try {
         const result = await signInWithPopup(auth, provider)
         localStorage.setItem('kullanici', JSON.stringify(result.user))
+        return result.user
     } catch (error) {
         throw Error(error.message)
     }

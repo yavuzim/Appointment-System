@@ -5,9 +5,10 @@ import Home from './pages/Home/Home';
 import Admin from './pages/Admin/Admin';
 import Moderator from './pages/Moderator/Moderator';
 import { bilgilerGetir } from './features/yoneticiler/yoneticiSlice';
-import { UseSelector, useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { ToastContainer } from 'react-toastify';
+import Kullanici from "./pages/Kullanici/Kullanici";
 
 function App() {
 
@@ -30,6 +31,7 @@ function App() {
           <Route path='/login' element={<Login />} />
           <Route path='/admin' element={<Admin />} />
           <Route path='/moderator' element={<Moderator />} />
+          <Route path='/kullanici' element={<Kullanici />} />
         </Routes>
       </Router>
     </div>
