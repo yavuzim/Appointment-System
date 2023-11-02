@@ -1,3 +1,4 @@
+import './Kullanici.css'
 import { useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
@@ -10,6 +11,9 @@ export default function Kullanici() {
     const dispatch = useDispatch()
     const { kullanici } = useSelector((state) => state.kullaniciState)
     const { secilenBirim } = useSelector((state) => state.birimState)
+
+    const bugun = new Date()
+    const formatlanmisTarih = bugun.getDate() + "." + (bugun.getMonth() + 1) + "." + bugun.getFullYear()
 
     useEffect(() => {
         if (!kullanici) {
@@ -30,9 +34,27 @@ export default function Kullanici() {
     }, [])
 
     return (
-        <div>
-          <div>Merhaba, {kullanici.email}</div>
-          <p>{secilenBirim.ad} için randevu alınız!</p>
+        <div className='kullanici'>
+            <div className='alert alert-secondary' role='alert'>
+                {kullanici && <p>Merhaba, <strong>{kullanici.email}</strong></p>}
+                {secilenBirim && <p><strong>{secilenBirim.ad}</strong> için randevu alınız.</p>}
+            </div>
+            <div className='alert alert-primary' role='alert'>
+                <h3>Randevu Saatini Seçiniz</h3>
+                <div className='mt-3'>
+                    <p>{formatlanmisTarih} için randevu alınız</p>
+                    <div className='row mt-4'>
+                        <div className='col-6 container'>
+                            <button className='btn btn-outline-dark btn-sm m-4' disabled>08:00</button>
+                            <button className='btn btn-outline-dark btn-sm m-4'>08:00</button>
+                            <button className='btn btn-outline-dark btn-sm m-4'>08:00</button>
+                            <button className='btn btn-outline-dark btn-sm m-4'>08:00</button>
+                            <button className='btn btn-outline-dark btn-sm m-4'>08:00</button>
+                            <button className='btn btn-outline-dark btn-sm m-4'>08:00</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     )
 }
