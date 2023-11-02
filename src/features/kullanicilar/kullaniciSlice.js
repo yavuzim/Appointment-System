@@ -15,6 +15,15 @@ export const loginGoogle = createAsyncThunk('kullanici/loginGoogle', async (veri
         return thunkAPI.rejectWithValue(message)
     }
 })
+export const kullaniciDoldur = createAsyncThunk('kullanici/kullaniciDoldur', async (_, thunkAPI) => {
+    console.log('login giriş');
+    try {
+        return await kullaniciService.kullaniciDoldur()
+    } catch (error) {
+        const message = error.message
+        return thunkAPI.rejectWithValue(message)
+    }
+})
 
 export const kullaniciSlice = createSlice({
     name: 'kullanici',
@@ -31,6 +40,13 @@ export const kullaniciSlice = createSlice({
                 state.kullanici = action.payload
             })
             .addCase(loginGoogle.rejected, (state, action) => {
+                state.message = action.payload
+                state.kullanici = null
+            })
+            .addCase(kullaniciDoldur.fulfilled, (state, action) => {
+                state.kullanici = action.payload
+            })
+            .addCase(kullaniciDoldur.rejected, (state, action) => {
                 state.message = action.payload
                 state.kullanici = null
             })

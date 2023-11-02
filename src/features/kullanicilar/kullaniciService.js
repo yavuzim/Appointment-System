@@ -12,8 +12,13 @@ const googleLogin = async () => {
     }
 }
 
+const kullaniciDoldur = () => {
+    return JSON.parse(localStorage.getItem('kullanici'))
+}
+
 const kullaniciService = {
-    googleLogin
+    googleLogin,
+    kullaniciDoldur
 }
 
 export default kullaniciService
