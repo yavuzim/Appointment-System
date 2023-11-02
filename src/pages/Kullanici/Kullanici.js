@@ -1,9 +1,21 @@
-import React from 'react'
+import { useEffect } from "react"
+import { useSelector } from "react-redux"
+import { useNavigate } from "react-router-dom"
 
 export default function Kullanici() {
-  return (
-    <div>
-      
-    </div>
-  )
+
+    const nagivate = useNavigate()
+    const { kullanici } = useSelector((state) => state.kullaniciState)
+
+    useEffect(()=>{
+        if (!kullanici) {
+            nagivate('/login')
+        } 
+    },[kullanici])
+
+    return (
+        <div>
+            Kullanici
+        </div>
+    )
 }

@@ -15,6 +15,7 @@ function Login() {
 
   const { secilenBirim, isLoading } = useSelector((state) => state.birimState)
   const { yonetici } = useSelector((state) => state.yoneticiState)
+  const {kullanici} = useSelector((state)=>state.kullaniciState)
 
   const [email, setEmail] = useState('')
   const [parola, setParola] = useState('')
@@ -58,6 +59,12 @@ function Login() {
       }
     }
   }, [yonetici])
+
+  useEffect(()=>{
+    if (kullanici!==null) {
+      nagivate('/kullanici')
+    }
+  },[kullanici])
 
   return (
     <div className='text-center'>
