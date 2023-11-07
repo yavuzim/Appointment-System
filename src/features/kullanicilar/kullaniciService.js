@@ -1,6 +1,6 @@
 import { auth, db } from '../../firebase/config'
 import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth'
-import { collection, getDocs, query, where } from 'firebase/firestore'
+import { addDoc, collection, getDocs, query, where, serverTimestamp } from 'firebase/firestore'
 
 const veriSetleri = [
     {
@@ -104,10 +104,34 @@ const saatleriFormatla = async (veri) => {
     return veriSetler
 }
 
+const randevuOlustur = async (veri) => {
+    const colRef = collection(db, "randevular")
+    try {
+        await addDoc(colRef, {
+            birimId: veri.birimId,
+            birimAd: veri.birimAd,
+            saatDeger: veri.saatDeger,
+            saatText: veri.saatText,
+            tarih: veri.tarih,
+            email: veri.email,
+            olusturulmaTarih: serverTimestamp(),
+            durum: "Bekliyor",
+            durumRenk: "secondary",
+            mesaj: ''
+        })
+        console.log("hata yok");
+        return `Randevunuz tarih : ${veri.tarih} saat : ${veri.saatText} olarak ${veri.birimAd} oluşturulmuştur.`
+    } catch (error) {
+        console.log("hata");
+        return `Bir hata oluştu ${error.mesaj}. Randevunuz eklenmedi.`
+    }
+}
+
 const kullaniciService = {
     googleLogin,
     kullaniciDoldur,
-    saatleriFormatla
+    saatleriFormatla,
+    randevuOlustur
 }
 
 export default kullaniciService

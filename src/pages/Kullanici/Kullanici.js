@@ -2,9 +2,10 @@ import './Kullanici.css'
 import { useEffect, useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
-import { kullaniciDoldur, tarihlerGetir } from "../../features/kullanicilar/kullaniciSlice"
+import { kullaniciDoldur, tarihlerGetir, randevuOlustur } from "../../features/kullanicilar/kullaniciSlice"
 import { birimSec } from "../../features/birimler/birimSlice"
 import Modal from 'react-modal'
+import { motion } from 'framer-motion'
 
 export default function Kullanici() {
 
@@ -18,6 +19,7 @@ export default function Kullanici() {
 
     const [modalIsOpan, setModalIsOpen] = useState(false)
     const [secilenSaat, setSecilenSaat] = useState(null)
+    const [secilenDeger, setSecilenDeger] = useState(null)
 
     const customStyles = {
         content: {
@@ -35,9 +37,25 @@ export default function Kullanici() {
     const handleRandevuAyarla = (veri) => {
         setModalIsOpen(true)
         setSecilenSaat(veri.text)
+        setSecilenDeger(veri)
     }
 
     const closeModal = () => {
+        setModalIsOpen(false)
+    }
+
+    const randevuEkle = () => {
+          console.log(secilenDeger, formatlanmisTarih, kullanici.email, secilenBirim.id);
+
+        const veri = {
+            birimId: secilenBirim.id,
+            birimAd: secilenBirim.ad,
+            saatDeger: secilenDeger.deger,
+            saatText: secilenDeger.text,
+            tarih: formatlanmisTarih,
+            email: kullanici.email
+        }
+        dispatch(randevuOlustur(veri))
         setModalIsOpen(false)
     }
 
@@ -63,21 +81,21 @@ export default function Kullanici() {
     return (
         <>
             <Modal isOpen={modalIsOpan} style={customStyles} onRequestClose={closeModal}>
-                <div>
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 2 }}>
                     <p><strong>{secilenBirim?.ad}</strong> birimi için</p>
                     <p><strong>{formatlanmisTarih}</strong> tarihi ve <strong>{secilenSaat}</strong> saatine randevu alıyorsunuz</p>
                     <p>Onaylıyor musunuz?</p>
                     <p className='d-flex justify-content-center'>
                         <button className='btn btn-outline-danger btn-sm m-4' onClick={closeModal}>İptal Et</button>
-                        <button className='btn btn-outline-success btn-sm m-4' onClick={closeModal}>Kabul Et</button>
+                        <button className='btn btn-outline-success btn-sm m-4' onClick={randevuEkle}>Kabul Et</button>
                     </p>
-                </div>
+                </motion.div>
             </Modal>
             <div className='kullanici'>
-                <div className='alert alert-secondary' role='alert'>
+                <motion.div className='alert alert-secondary' role='alert' initial={{ y: "-100vh" }} animate={{ y: 0 }} transition={{ duration: 2 }}>
                     {kullanici && <p>Merhaba, <strong>{kullanici.email}</strong></p>}
                     {secilenBirim && <p><strong>{secilenBirim.ad}</strong> için randevu alınız.</p>}
-                </div>
+                </motion.div>
                 <div className='alert alert-primary' role='alert'>
                     <h3>Randevu Saatini Seçiniz</h3>
                     <div className='mt-3'>

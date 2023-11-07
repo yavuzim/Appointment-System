@@ -34,6 +34,16 @@ export const tarihlerGetir = createAsyncThunk('kullanici/tarihlerGetir', async (
     }
 })
 
+export const randevuOlustur = createAsyncThunk('kullanici/randevuOlustur', async (veri, thunkAPI) => {
+    try {
+        return await kullaniciService.randevuOlustur(veri)
+    } catch (error) {
+        const message = error.message
+        return thunkAPI.rejectWithValue(message)
+    }
+})
+
+
 export const kullaniciSlice = createSlice({
     name: 'kullanici',
     initialState,
@@ -65,6 +75,12 @@ export const kullaniciSlice = createSlice({
             .addCase(tarihlerGetir.rejected, (state, action) => {
                 state.message = action.payload
                 state.randevuSaatler = []
+            })
+            .addCase(randevuOlustur.fulfilled, (state, action) => {
+                state.message = action.payload
+            })
+            .addCase(randevuOlustur.rejected, (state, action) => {
+                state.message = action.payload
             })
     }
 })
