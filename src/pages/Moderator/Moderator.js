@@ -19,7 +19,7 @@ export default function Moderator() {
     const [yeniParolaTekrar, setYeniParolaTekrar] = useState('')
 
     const handleClick = () => {
-        if (yeniParola == yeniParolaTekrar) {
+        if (yeniParola === yeniParolaTekrar) {
             updatePassword(user, yeniParola).then(()=>{
                 toast.success("Parola Başarılı Bir Şekilde Değiştirildi.")
             }).catch((error)=>{
