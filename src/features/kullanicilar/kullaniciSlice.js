@@ -17,7 +17,6 @@ export const loginGoogle = createAsyncThunk('kullanici/loginGoogle', async (veri
     }
 })
 export const kullaniciDoldur = createAsyncThunk('kullanici/kullaniciDoldur', async (_, thunkAPI) => {
-    console.log('login giriş');
     try {
         return await kullaniciService.kullaniciDoldur()
     } catch (error) {
@@ -27,7 +26,6 @@ export const kullaniciDoldur = createAsyncThunk('kullanici/kullaniciDoldur', asy
 })
 
 export const tarihlerGetir = createAsyncThunk('kullanici/tarihlerGetir', async (veri, _, thunkAPI) => {
-    console.log('login giriş');
     try {
         return await kullaniciService.saatleriFormatla(veri)
     } catch (error) {

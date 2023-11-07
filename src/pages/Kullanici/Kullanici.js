@@ -2,18 +2,22 @@ import './Kullanici.css'
 import { useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
-import { kullaniciDoldur } from "../../features/kullanicilar/kullaniciSlice"
+import { kullaniciDoldur, tarihlerGetir } from "../../features/kullanicilar/kullaniciSlice"
 import { birimSec } from "../../features/birimler/birimSlice"
 
 export default function Kullanici() {
 
     const nagivate = useNavigate()
     const dispatch = useDispatch()
-    const { kullanici } = useSelector((state) => state.kullaniciState)
+    const { kullanici, randevuSaatler } = useSelector((state) => state.kullaniciState)
     const { secilenBirim } = useSelector((state) => state.birimState)
 
     const bugun = new Date()
     const formatlanmisTarih = bugun.getDate() + "." + (bugun.getMonth() + 1) + "." + bugun.getFullYear()
+
+    const handleRandevuAyarla = (veri) => {
+        console.log(veri);
+    }
 
     useEffect(() => {
         if (!kullanici) {
@@ -31,6 +35,7 @@ export default function Kullanici() {
         }
         dispatch(birimSec(JSON.parse(secilenBirimId)))
         dispatch(kullaniciDoldur())
+        dispatch(tarihlerGetir(JSON.parse(secilenBirimId)))
     }, [])
 
     return (
@@ -45,12 +50,10 @@ export default function Kullanici() {
                     <p>{formatlanmisTarih} için randevu alınız</p>
                     <div className='row mt-4'>
                         <div className='col-6 container'>
-                            <button className='btn btn-outline-dark btn-sm m-4' disabled>08:00</button>
-                            <button className='btn btn-outline-dark btn-sm m-4'>08:00</button>
-                            <button className='btn btn-outline-dark btn-sm m-4'>08:00</button>
-                            <button className='btn btn-outline-dark btn-sm m-4'>08:00</button>
-                            <button className='btn btn-outline-dark btn-sm m-4'>08:00</button>
-                            <button className='btn btn-outline-dark btn-sm m-4'>08:00</button>
+                            {randevuSaatler?.map(veri => (
+                                <button key={veri.deger} className={`btn btn-outline-dark btn-sm m-4 ${veri.pasifMi === true ? 'disabled' : ''}`}
+                                onClick={()=>handleRandevuAyarla(veri)} >{veri.text}</button>
+                            ))}
                         </div>
                     </div>
                 </div>

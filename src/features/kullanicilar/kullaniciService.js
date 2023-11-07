@@ -6,7 +6,7 @@ const veriSetleri = [
     {
         text: "08:00",
         deger: 8,
-        pasifMi: false
+        pasifMi: true
     },
     {
         text: "09:00",
@@ -21,7 +21,7 @@ const veriSetleri = [
     {
         text: "11:00",
         deger: 11,
-        pasifMi: false
+        pasifMi: true
     },
     {
         text: "12:00",
@@ -57,7 +57,7 @@ const veriSetleri = [
         text: "18:00",
         deger: 18,
         pasifMi: false
-    },
+    }
 ]
 
 const googleLogin = async () => {
@@ -106,7 +106,8 @@ const saatleriFormatla = async (veri) => {
 
 const kullaniciService = {
     googleLogin,
-    kullaniciDoldur
+    kullaniciDoldur,
+    saatleriFormatla
 }
 
 export default kullaniciService
