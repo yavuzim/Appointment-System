@@ -3,6 +3,7 @@ import kullaniciService from './kullaniciService'
 
 const initialState = {
     kullanici: null,
+    randevuSaatler: [],
     message: ""
 }
 
@@ -19,6 +20,16 @@ export const kullaniciDoldur = createAsyncThunk('kullanici/kullaniciDoldur', asy
     console.log('login giriş');
     try {
         return await kullaniciService.kullaniciDoldur()
+    } catch (error) {
+        const message = error.message
+        return thunkAPI.rejectWithValue(message)
+    }
+})
+
+export const tarihlerGetir = createAsyncThunk('kullanici/tarihlerGetir', async (veri, _, thunkAPI) => {
+    console.log('login giriş');
+    try {
+        return await kullaniciService.saatleriFormatla(veri)
     } catch (error) {
         const message = error.message
         return thunkAPI.rejectWithValue(message)
@@ -49,6 +60,13 @@ export const kullaniciSlice = createSlice({
             .addCase(kullaniciDoldur.rejected, (state, action) => {
                 state.message = action.payload
                 state.kullanici = null
+            })
+            .addCase(tarihlerGetir.fulfilled, (state, action) => {
+                state.randevuSaatler = action.payload
+            })
+            .addCase(tarihlerGetir.rejected, (state, action) => {
+                state.message = action.payload
+                state.randevuSaatler = []
             })
     }
 })
