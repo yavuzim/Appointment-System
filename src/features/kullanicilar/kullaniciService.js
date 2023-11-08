@@ -1,12 +1,12 @@
 import { auth, db } from '../../firebase/config'
 import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth'
-import { addDoc, collection, getDocs, query, where, serverTimestamp } from 'firebase/firestore'
+import { addDoc, collection, getDocs, query, where, serverTimestamp, arrayUnion, updateDoc, doc } from 'firebase/firestore'
 
 const veriSetleri = [
     {
         text: "08:00",
         deger: 8,
-        pasifMi: true
+        pasifMi: false
     },
     {
         text: "09:00",
@@ -21,7 +21,7 @@ const veriSetleri = [
     {
         text: "11:00",
         deger: 11,
-        pasifMi: true
+        pasifMi: false
     },
     {
         text: "12:00",
@@ -79,7 +79,7 @@ const saatleriFormatla = async (veri) => {
     const pasifTarihlerRef = collection(db, "tarihler")
     const bugun = new Date()
     const formatlanmisTarih = bugun.getDate() + "." + (bugun.getMonth() + 1) + "." + bugun.getFullYear()
-
+   
     let q = query(pasifTarihlerRef, where("tarih", "==", formatlanmisTarih))
     q = query(q, where("birim", "==", veri))
 
@@ -104,9 +104,36 @@ const saatleriFormatla = async (veri) => {
     return veriSetler
 }
 
+const pasifTarihEkle = async (birim, tarih, deger, text) => {
+    const tarihRef = collection(db, "tarihler")
+    const q = query(tarihRef, where("birim", "==", birim), where("tarih", "==", tarih))
+    const docSnap = await getDocs(q)
+    const saat = {
+        deger,
+        text,
+        pasifMi: true
+    }
+    if (docSnap.empty) {
+        await addDoc(tarihRef, {
+            birim: birim,
+            tarih: tarih,
+            saatler: arrayUnion(saat)
+        })
+    } else {
+        docSnap.forEach(async (belge) => {
+            const belgeId = belge.id
+            const belgeRef = doc(db, 'tarihler', belgeId)
+            await updateDoc(belgeRef, {
+                saatler: arrayUnion(saat)
+            })
+        })
+    }
+}
+
 const randevuOlustur = async (veri) => {
     const colRef = collection(db, "randevular")
     try {
+        console.log("1");
         await addDoc(colRef, {
             birimId: veri.birimId,
             birimAd: veri.birimAd,
@@ -119,10 +146,11 @@ const randevuOlustur = async (veri) => {
             durumRenk: "secondary",
             mesaj: ''
         })
-        console.log("hata yok");
+        console.log("2");
+        await pasifTarihEkle(veri.birimId, veri.tarih, veri.saatDeger, veri.saatText)
         return `Randevunuz tarih : ${veri.tarih} saat : ${veri.saatText} olarak ${veri.birimAd} oluşturulmuştur.`
     } catch (error) {
-        console.log("hata");
+        console.log("3");
         return `Bir hata oluştu ${error.mesaj}. Randevunuz eklenmedi.`
     }
 }

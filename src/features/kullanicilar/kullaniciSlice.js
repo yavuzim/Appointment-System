@@ -25,7 +25,7 @@ export const kullaniciDoldur = createAsyncThunk('kullanici/kullaniciDoldur', asy
     }
 })
 
-export const tarihlerGetir = createAsyncThunk('kullanici/tarihlerGetir', async (veri, _, thunkAPI) => {
+export const tarihlerGetir = createAsyncThunk('kullanici/tarihlerGetir', async (veri, thunkAPI) => {
     try {
         return await kullaniciService.saatleriFormatla(veri)
     } catch (error) {

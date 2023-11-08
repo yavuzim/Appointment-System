@@ -103,7 +103,7 @@ export default function Kullanici() {
                         <div className='row mt-4'>
                             <div className='col-6 container'>
                                 {randevuSaatler?.map(veri => (
-                                    <button key={veri.deger} className={`btn btn-outline-dark btn-sm m-4 ${veri.pasifMi === true ? 'disabled' : ''}`}
+                                    <button  key={veri.deger} className={`btn btn-outline-dark btn-sm m-4 ${veri.pasifMi === true ? 'disabled' : ''}`}
                                         onClick={() => handleRandevuAyarla(veri)} >{veri.text}</button>
                                 ))}
                             </div>
