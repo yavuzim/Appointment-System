@@ -3,14 +3,15 @@ import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { birimSec } from "../../features/birimler/birimSlice"
-import { kullaniciDoldur } from "../../features/kullanicilar/kullaniciSlice"
+import { kullaniciDoldur, randevularGetir } from "../../features/kullanicilar/kullaniciSlice"
 import { motion } from 'framer-motion'
+
 
 function Randevularim() {
     const nagivate = useNavigate()
     const dispatch = useDispatch()
 
-    const { kullanici } = useSelector((state) => state.kullaniciState)
+    const { kullanici, kisiRandevular } = useSelector((state) => state.kullaniciState)
     const { secilenBirim } = useSelector((state) => state.birimState)
 
     useEffect(() => {
@@ -27,7 +28,16 @@ function Randevularim() {
 
         dispatch(birimSec(JSON.parse(secilenBirimId)))
         dispatch(kullaniciDoldur())
+        dispatch(randevularGetir(JSON.parse(kullanici).email))
 
+    }, [])
+
+    useEffect(() => {
+        const kullanici = localStorage.getItem('kullanici')
+
+        if (!kisiRandevular) {
+            dispatch(randevularGetir(JSON.parse(kullanici).email))
+        }
     }, [])
 
     const handleYonlen = () => { nagivate('/kullanici') }

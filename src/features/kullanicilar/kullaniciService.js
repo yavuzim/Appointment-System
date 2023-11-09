@@ -79,7 +79,7 @@ const saatleriFormatla = async (veri) => {
     const pasifTarihlerRef = collection(db, "tarihler")
     const bugun = new Date()
     const formatlanmisTarih = bugun.getDate() + "." + (bugun.getMonth() + 1) + "." + bugun.getFullYear()
-   
+
     let q = query(pasifTarihlerRef, where("tarih", "==", formatlanmisTarih))
     q = query(q, where("birim", "==", veri))
 
@@ -155,11 +155,34 @@ const randevuOlustur = async (veri) => {
     }
 }
 
+const randevularGetir = async (veri) => {
+    const colRef = collection(db, "randevular")
+    const q = query(colRef, where("email", "==", veri))
+    const docSnap = await getDocs(q)
+
+    let dizi = []
+
+    docSnap.docs.forEach(belge => {
+        const randevuBelgesi = {
+            id: belge.id,
+            birimAd: belge.data().birimAd,
+            durum: belge.data().durum,
+            saat: belge.data().saatText,
+            tarih: belge.data().tarih,
+            durumRenk: belge.data().durumRenk,
+            mesaj: belge.data().mesaj
+        }
+        dizi.push(randevuBelgesi)
+    })
+    return dizi
+}
+
 const kullaniciService = {
     googleLogin,
     kullaniciDoldur,
     saatleriFormatla,
-    randevuOlustur
+    randevuOlustur,
+    randevularGetir
 }
 
 export default kullaniciService
