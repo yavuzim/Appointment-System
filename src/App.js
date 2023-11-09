@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { ToastContainer } from 'react-toastify';
 import Kullanici from "./pages/Kullanici/Kullanici";
+import Randevularim from './pages/Kullanici/Randevularim';
 
 function App() {
 
@@ -32,6 +33,7 @@ function App() {
           <Route path='/admin' element={<Admin />} />
           <Route path='/moderator' element={<Moderator />} />
           <Route path='/kullanici' element={<Kullanici />} />
+          <Route path='/randevularim' element={<Randevularim />} />
         </Routes>
       </Router>
     </div>

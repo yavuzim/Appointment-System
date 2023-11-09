@@ -6,6 +6,8 @@ import { kullaniciDoldur, tarihlerGetir, randevuOlustur } from "../../features/k
 import { birimSec } from "../../features/birimler/birimSlice"
 import Modal from 'react-modal'
 import { motion } from 'framer-motion'
+import { toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 export default function Kullanici() {
 
@@ -45,7 +47,7 @@ export default function Kullanici() {
     }
 
     const randevuEkle = () => {
-          console.log(secilenDeger, formatlanmisTarih, kullanici.email, secilenBirim.id);
+        console.log(secilenDeger, formatlanmisTarih, kullanici.email, secilenBirim.id);
 
         const veri = {
             birimId: secilenBirim.id,
@@ -57,6 +59,12 @@ export default function Kullanici() {
         }
         dispatch(randevuOlustur(veri))
         setModalIsOpen(false)
+
+        toast.success("Randevunuz Oluşturuldu.")
+        setTimeout(() => {
+            nagivate('/randevularim')
+        }, 1000);
+
     }
 
     useEffect(() => {
@@ -103,7 +111,7 @@ export default function Kullanici() {
                         <div className='row mt-4'>
                             <div className='col-6 container'>
                                 {randevuSaatler?.map(veri => (
-                                    <button  key={veri.deger} className={`btn btn-outline-dark btn-sm m-4 ${veri.pasifMi === true ? 'disabled' : ''}`}
+                                    <button key={veri.deger} className={`btn btn-outline-dark btn-sm m-4 ${veri.pasifMi === true ? 'disabled' : ''}`}
                                         onClick={() => handleRandevuAyarla(veri)} >{veri.text}</button>
                                 ))}
                             </div>
