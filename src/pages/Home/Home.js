@@ -34,7 +34,7 @@ export default function Home() {
         <div className='text-center paper'>
             <form className='text-center'>
                 <div className='alert alert-primary text-center'>
-                    <h1 className='h1 mb-2 font-weight-normal text-center'>RANDEVU SİSTEMİ</h1>
+                    <h1 className='h1 mb-2 font-weight-normal text-center'>SİA RANDEVU SİSTEMİ</h1>
                 </div>
                 {birimler.length > 0 ? (
                     <div className='row'>

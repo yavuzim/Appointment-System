@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { useEffect, useState } from "react"
 import { birimSec } from "../../features/birimler/birimSlice"
+import { cikisYap } from '../../features/yoneticiler/yoneticiSlice'
 
 import { getAuth, updatePassword } from 'firebase/auth'
 import { toast } from 'react-toastify'
@@ -20,14 +21,19 @@ export default function Moderator() {
 
     const handleClick = () => {
         if (yeniParola === yeniParolaTekrar) {
-            updatePassword(user, yeniParola).then(()=>{
+            updatePassword(user, yeniParola).then(() => {
                 toast.success("Parola Başarılı Bir Şekilde Değiştirildi.")
-            }).catch((error)=>{
+            }).catch((error) => {
                 toast.error("Bir Hata Oluştu. Çıkış Yapıp Tekrar Giriniz.")
             })
         } else {
 
         }
+    }
+
+    const handleCikisYap = () => {
+        dispatch(cikisYap())
+        nagivate('/')
     }
 
     const auth = getAuth()
@@ -54,8 +60,17 @@ export default function Moderator() {
 
     return (
         <div className='moderator'>
-            <div>Moderator</div>
-            {secilenBirim && <p>{secilenBirim.ad}</p>}
+            {  /*<div>Moderator</div>
+            {secilenBirim && <p>{secilenBirim.ad}</p>}*/}
+
+            <div className='alert alert-secondary' role='alert'>
+                <span>{secilenBirim && <strong>{secilenBirim.ad}</strong>} için moderator paneline hoş geldiniz.</span>
+                <div className='text-end'>
+                    {yonetici && <span className='me-4'>Merhaba {yonetici.email}</span>}
+                    <button className='btn btn-danger' onClick={handleCikisYap}>Çıkış</button>
+                </div>
+            </div>
+
             <div className='alert alert-primary' role='alert'>
                 <h3>Parola Değiştir</h3>
                 <div className='mt-3'>

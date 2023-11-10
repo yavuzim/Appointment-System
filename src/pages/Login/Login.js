@@ -5,8 +5,11 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import BarLoader from 'react-spinners/BarLoader'
 import { birimSec } from '../../features/birimler/birimSlice'
-import { login } from '../../features/yoneticiler/yoneticiSlice'
+import { login, reset } from '../../features/yoneticiler/yoneticiSlice'
 import { loginGoogle } from '../../features/kullanicilar/kullaniciSlice'
+
+import { toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 function Login() {
 
@@ -14,8 +17,8 @@ function Login() {
   const dispatch = useDispatch()
 
   const { secilenBirim, isLoading } = useSelector((state) => state.birimState)
-  const { yonetici } = useSelector((state) => state.yoneticiState)
-  const {kullanici} = useSelector((state)=>state.kullaniciState)
+  const { yonetici, message } = useSelector((state) => state.yoneticiState)
+  const { kullanici } = useSelector((state) => state.kullaniciState)
 
   const [email, setEmail] = useState('')
   const [parola, setParola] = useState('')
@@ -42,29 +45,37 @@ function Login() {
   }, [])
 
   useEffect(() => {
-    if (yonetici && secilenBirim) {
-      if (yonetici.yetki === "admin") {
-        localStorage.setItem('yonetici', JSON.stringify({ uid: yonetici.uid }))
-        nagivate('/admin')
-      } else if (yonetici.yetki === "moderator") {
-
-        if (yonetici.yetkiliBirimId === secilenBirim.id) {
+    if (yonetici) {
+      if (secilenBirim) {
+        if (yonetici.yetki === "admin") {
           localStorage.setItem('yonetici', JSON.stringify({ uid: yonetici.uid }))
-          nagivate('/moderator')
+          nagivate('/admin')
+        } else if (yonetici.yetki === "moderator") {
+
+          if (yonetici.yetkiliBirimId === secilenBirim.id) {
+            localStorage.setItem('yonetici', JSON.stringify({ uid: yonetici.uid }))
+            nagivate('/moderator')
+          } else {
+            toast.error("Yetkisiz Giriş Yapılmaya Çalışıldı!")
+          }
         } else {
-          console.log("Moderator Yetkisiz Giriş");
+          // console.log("Yetkisiz Giriş!");
+          toast.error("Yetkisiz Giriş!")
         }
-      } else {
-        console.log("Yetkisiz Giriş!");
+      } 
+    }else {
+      if (message) {
+        toast.error(message)
+        dispatch(reset())
       }
     }
-  }, [yonetici])
+  }, [yonetici, message])
 
-  useEffect(()=>{
-    if (kullanici!==null) {
+  useEffect(() => {
+    if (kullanici !== null) {
       nagivate('/kullanici')
     }
-  },[kullanici])
+  }, [kullanici])
 
   return (
     <div className='text-center'>
