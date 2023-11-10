@@ -1,6 +1,6 @@
 import { auth, db } from '../../firebase/config'
 import { signInWithEmailAndPassword, signOut } from 'firebase/auth'
-import { collection, query, where, getDocs, doc, updateDoc, getDoc } from 'firebase/firestore'
+import { collection, query, where, getDocs, doc, updateDoc, getDoc, orderBy, limit } from 'firebase/firestore'
 import birimService from '../birimler/birimService'
 
 const login = async (email, parola) => {
@@ -97,13 +97,36 @@ const birimModeratorlerGetir = async () => {
     return dizi
 }
 
+const son10birimRandevularGetir = async (birimId) => {
+    try {
+        const colRef = collection(db, "randevular")
+        const q = query(colRef, where("birimId", "==", birimId), where("durum", "==", "Bekliyor"), orderBy("olusturulmaTarih", "desc"), limit(10))
+        const docSnap = await getDocs(q)
+        let dizi = []
+
+        docSnap.docs.forEach(belge => {
+            const veri = {
+                belgeId: belge.id,
+                email: belge.data().email,
+                saatText: belge.data().saatText,
+                tarih: belge.data().tarih
+            }
+            dizi.push(veri)
+        })
+        return dizi
+    } catch (error) {
+        throw Error(error.message)
+    }
+}
+
 const yoneticiService = {
     login,
     yoneticiBilgilerGetir,
     cikisYap,
     moderatorlerGetir,
     birimeModeratorAta,
-    birimModeratorlerGetir
+    birimModeratorlerGetir,
+    son10birimRandevularGetir
 }
 
 

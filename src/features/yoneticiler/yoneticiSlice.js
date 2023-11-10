@@ -5,6 +5,7 @@ const initialState = {
     yonetici: null,
     moderatorler: [],
     yetkililer: [],
+    randvular: [],
     isError: false,
     isSuccess: false,
     isLoading: false,
@@ -59,6 +60,15 @@ export const birimeModeratorAta = createAsyncThunk('yonetici/birimeModeratorAta'
 export const birimModeratorlerGetir = createAsyncThunk('yonetici/birimModeratorlerGetir', async (_, thunkAPI) => {
     try {
         return await yoneticiService.birimModeratorlerGetir()
+    } catch (error) {
+        const message = error.message
+        return thunkAPI.rejectWithValue(message)
+    }
+})
+
+export const son10birimRandevularGetir = createAsyncThunk('yonetici/son10birimRandevularGetir', async (birimId, thunkAPI) => {
+    try {
+        return await yoneticiService.son10birimRandevularGetir(birimId)
     } catch (error) {
         const message = error.message
         return thunkAPI.rejectWithValue(message)
@@ -145,6 +155,20 @@ export const yoneticiSlice = createSlice({
             })
             .addCase(birimModeratorlerGetir.fulfilled, (state, action) => {
                 state.yetkililer = action.payload
+            })
+            .addCase(son10birimRandevularGetir.pending, (state) => {
+                state.isLoading = true
+            })
+            .addCase(son10birimRandevularGetir.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.isSuccess = true
+                state.randvular = action.payload
+            })
+            .addCase(son10birimRandevularGetir.rejected, (state, action) => {
+                state.isLoading = false
+                state.isError = true
+                state.message = action.payload
+                state.randvular = []
             })
     }
 })

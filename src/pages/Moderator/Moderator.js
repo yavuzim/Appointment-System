@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { useEffect, useState } from "react"
 import { birimSec } from "../../features/birimler/birimSlice"
-import { cikisYap } from '../../features/yoneticiler/yoneticiSlice'
+import { cikisYap, son10birimRandevularGetir } from '../../features/yoneticiler/yoneticiSlice'
 
 import { getAuth, updatePassword } from 'firebase/auth'
 import { toast } from 'react-toastify'
@@ -55,6 +55,7 @@ export default function Moderator() {
             nagivate('/login')
         }
         dispatch(birimSec(JSON.parse(secilenbirimId)))
+        dispatch(son10birimRandevularGetir(JSON.parse(secilenbirimId)))
 
     }, [isSuccess])
 
