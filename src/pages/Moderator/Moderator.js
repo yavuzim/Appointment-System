@@ -11,7 +11,7 @@ import 'react-toastify/dist/ReactToastify.css'
 
 export default function Moderator() {
 
-    const { yonetici, isSuccess } = useSelector((state) => state.yoneticiState)
+    const { yonetici, isSuccess, randvular } = useSelector((state) => state.yoneticiState)
     const { secilenBirim, isLoading } = useSelector((state) => state.birimState)
     const nagivate = useNavigate()
     const dispatch = useDispatch()
@@ -77,7 +77,7 @@ export default function Moderator() {
                 <div className='mt-3'>
                     <div className='row'>
                         <div className='col-6'>
-                            <p>{yonetici.email}</p>
+                            <p>{yonetici?.email}</p>
                         </div>
                     </div>
                     <div className='row'>
@@ -96,6 +96,23 @@ export default function Moderator() {
                         <div className='text-center'>
                             <button className='btn btn-outline-primary btn-sum' onClick={handleClick}>Değiştir</button>
                         </div>
+                    </div>
+                </div>
+            </div>
+            <div className='alert alert-secondary' role='alert'>
+                <h5>Bekleyen Randevular</h5>
+                <div className='mt-3'>
+                    <div className='row mt-4'>
+                        <ul className='list-group'>
+                            {randvular && randvular.map(randevu => (
+                                <li className='list-group-item d-flex justify-content-between align-item-center' key={randevu.belgeId}>
+                                    {randevu.email}
+                                    <span className='badge bg-primary rounded-pill'>
+                                        {randevu.tarih} - {randevu.saatText}
+                                    </span>
+                                </li>
+                            ))}
+                        </ul>
                     </div>
                 </div>
             </div>
