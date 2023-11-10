@@ -52,36 +52,17 @@ function Randevularim() {
                 <h3>Randevularınız</h3>
                 <div className="mt-3">
                     <div className="row mt-4">
-                        <div className="col-4 container">
-                            <div className="alert alert-primary" role="alert">
-                                Randevu 1
+                        {kisiRandevular && kisiRandevular.map(veri => (
+                            <div className="col-4 container" key={veri.id}>
+                                <div className={`alert alert-${veri.durumRenk}`} role="alert">
+                                    <p>{veri.birimAd}</p>
+                                    <p>{veri.tarih} - {veri.saat}</p>
+                                    <p>Durum : {veri.durum}</p>
+                                    {veri.mesaj =='' ? <p></p> : <p>Mesaj : {veri.mesaj}</p>}
+                                </div>
                             </div>
-                        </div>
-                        <div className="col-4 container">
-                            <div className="alert alert-primary" role="alert">
-                                Randevu 2
-                            </div>
-                        </div>
-                        <div className="col-4 container">
-                            <div className="alert alert-primary" role="alert">
-                                Randevu 3
-                            </div>
-                        </div>
-                        <div className="col-4 container">
-                            <div className="alert alert-danger" role="alert">
-                                Randevu 4
-                            </div>
-                        </div>
-                        <div className="col-4 container">
-                            <div className="alert alert-success" role="alert">
-                                Randevu 5
-                            </div>
-                        </div>
-                        <div className="col-4 container">
-                            <div className="alert alert-secondary" role="alert">
-                                Randevu 6
-                            </div>
-                        </div>
+                        ))}
+
                     </div>
                 </div>
             </div>
