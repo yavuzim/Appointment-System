@@ -53,6 +53,15 @@ export const randevularGetir = createAsyncThunk('kullanici/randevularGetir', asy
     }
 })
 
+export const cikisYap = createAsyncThunk('kullanici/cikisYap', async (_, thunkAPI) => {
+    try {
+        return await kullaniciService.cikisYap()
+    } catch (error) {
+        const message = error.message
+        return thunkAPI.rejectWithValue(message)
+    }
+})
+
 
 export const kullaniciSlice = createSlice({
     name: 'kullanici',
@@ -98,7 +107,14 @@ export const kullaniciSlice = createSlice({
             .addCase(randevularGetir.rejected, (state, action) => {
                 state.message = action.payload
             })
-            
+            .addCase(cikisYap.fulfilled, (state, action) => {
+                state.kullanici = action.payload
+            })
+            .addCase(cikisYap.rejected, (state, action) => {
+                state.message = action.payload
+                state.kullanici = null
+            })
+
     }
 })
 

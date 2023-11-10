@@ -2,7 +2,7 @@ import './Kullanici.css'
 import { useEffect, useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
-import { kullaniciDoldur, tarihlerGetir, randevuOlustur } from "../../features/kullanicilar/kullaniciSlice"
+import { kullaniciDoldur, tarihlerGetir, randevuOlustur, cikisYap } from "../../features/kullanicilar/kullaniciSlice"
 import { birimSec } from "../../features/birimler/birimSlice"
 import Modal from 'react-modal'
 import { motion } from 'framer-motion'
@@ -86,6 +86,15 @@ export default function Kullanici() {
         dispatch(tarihlerGetir(JSON.parse(secilenBirimId)))
     }, [])
 
+    const handleYonlen = () => {
+        nagivate('/randevularim')
+    }
+
+    const handleCikisYap = () => {
+        dispatch(cikisYap())
+        nagivate('/')
+    }
+
     return (
         <>
             <Modal isOpen={modalIsOpan} style={customStyles} onRequestClose={closeModal}>
@@ -103,6 +112,10 @@ export default function Kullanici() {
                 <motion.div className='alert alert-secondary' role='alert' initial={{ y: "-100vh" }} animate={{ y: 0 }} transition={{ duration: 2 }}>
                     {kullanici && <p>Merhaba, <strong>{kullanici.email}</strong></p>}
                     {secilenBirim && <p><strong>{secilenBirim.ad}</strong> için randevu alınız.</p>}
+                    <p className="d-flex justify-content-between">
+                        <button className="btn btn-outline-primary btn-sm mx-4" onClick={handleYonlen}>Randevularım</button>
+                        <button className="btn btn-outline-danger btn-sm mx-4" onClick={handleCikisYap}>Çıkış Yap</button>
+                    </p>
                 </motion.div>
                 <div className='alert alert-primary' role='alert'>
                     <h3>Randevu Saatini Seçiniz</h3>

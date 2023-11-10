@@ -3,7 +3,7 @@ import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { birimSec } from "../../features/birimler/birimSlice"
-import { kullaniciDoldur, randevularGetir } from "../../features/kullanicilar/kullaniciSlice"
+import { kullaniciDoldur, randevularGetir, cikisYap } from "../../features/kullanicilar/kullaniciSlice"
 import { motion } from 'framer-motion'
 
 
@@ -42,11 +42,19 @@ function Randevularim() {
 
     const handleYonlen = () => { nagivate('/kullanici') }
 
+    const handleCikisYap = () => {
+        dispatch(cikisYap())
+        nagivate('/')
+    }
+
     return (
         <div className="randevu">
             <motion.div className='alert alert-secondary' role='alert' initial={{ scale: 0.5 }} animate={{ scale: 1 }} transition={{ duration: 1 }}>
                 {kullanici && <p>Merhaba, <strong>{kullanici.email}</strong></p>}
-                <button className="btn btn-primary" onClick={handleYonlen}> {secilenBirim && <p><strong>{secilenBirim.ad}</strong> için randevu alınız.</p>}</button>
+              <p className="d-flex justify-content-between">
+                <button className="btn btn-outline-primary btn-sm mx-4" onClick={handleYonlen}>Randevu Al</button>
+                <button className="btn btn-outline-danger btn-sm mx-4" onClick={handleCikisYap}>Çıkış Yap</button>
+              </p>
             </motion.div>
             <div className="alert alert-light" role="alert">
                 <h3>Randevularınız</h3>

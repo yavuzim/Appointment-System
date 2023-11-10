@@ -1,5 +1,5 @@
 import { auth, db } from '../../firebase/config'
-import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth'
+import { signInWithPopup, GoogleAuthProvider, signOut } from 'firebase/auth'
 import { addDoc, collection, getDocs, query, where, serverTimestamp, arrayUnion, updateDoc, doc } from 'firebase/firestore'
 
 const veriSetleri = [
@@ -155,6 +155,12 @@ const randevuOlustur = async (veri) => {
     }
 }
 
+const cikisYap = async () =>{
+    await signOut(auth)
+    localStorage.removeItem('kullanici')
+    return null
+}
+
 const randevularGetir = async (veri) => {
     const colRef = collection(db, "randevular")
     const q = query(colRef, where("email", "==", veri))
@@ -177,12 +183,14 @@ const randevularGetir = async (veri) => {
     return dizi
 }
 
+
 const kullaniciService = {
     googleLogin,
     kullaniciDoldur,
     saatleriFormatla,
     randevuOlustur,
-    randevularGetir
+    randevularGetir,
+    cikisYap
 }
 
 export default kullaniciService
