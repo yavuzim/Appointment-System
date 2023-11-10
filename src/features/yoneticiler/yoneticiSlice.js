@@ -74,6 +74,14 @@ export const son10birimRandevularGetir = createAsyncThunk('yonetici/son10birimRa
         return thunkAPI.rejectWithValue(message)
     }
 })
+export const durumGuncelle = createAsyncThunk('yonetici/durumGuncelle', async (veri, thunkAPI) => {
+    try {
+        return await yoneticiService.durumDegistir(veri)
+    } catch (error) {
+        const message = error.message
+        return thunkAPI.rejectWithValue(message)
+    }
+})
 
 
 export const yoneticiSlice = createSlice({
@@ -169,6 +177,20 @@ export const yoneticiSlice = createSlice({
                 state.isError = true
                 state.message = action.payload
                 state.randvular = []
+            })
+            .addCase(durumGuncelle.pending, (state) => {
+                state.isLoading = true
+                state.isSuccess=false
+            })
+            .addCase(durumGuncelle.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.isSuccess = true
+                state.message = action.payload
+            })
+            .addCase(durumGuncelle.rejected, (state, action) => {
+                state.isLoading = false
+                state.isError = true
+                state.message = action.payload
             })
     }
 })

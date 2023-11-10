@@ -119,6 +119,15 @@ const son10birimRandevularGetir = async (birimId) => {
     }
 }
 
+const durumDegistir = async (veri) => {
+    const belgeRef = doc(db, "randevular", veri.belgeId)
+    await updateDoc(belgeRef, {
+        durum: veri.durum,
+        durumRenk: veri.durumRenk
+    })
+    return "Durum Değiştirildi"
+}
+
 const yoneticiService = {
     login,
     yoneticiBilgilerGetir,
@@ -126,7 +135,8 @@ const yoneticiService = {
     moderatorlerGetir,
     birimeModeratorAta,
     birimModeratorlerGetir,
-    son10birimRandevularGetir
+    son10birimRandevularGetir,
+    durumDegistir
 }
 
 
